@@ -2,10 +2,10 @@ let express=require("express");
 let nodemailer=require("nodemailer");
 let app=express();
 let bodyparser=require("body-parser");
-app.use(express.static(__dirname+'/public'));
+app.use(express.static("./public"));
 app.use(bodyparser());
 app.get("/",(req,res)=>{
-    res.sendFile("/index.html");
+    res.sendFile("index.html");
 })
 app.post("/submit",(req,res)=>{
     console.log(req.body.name);
