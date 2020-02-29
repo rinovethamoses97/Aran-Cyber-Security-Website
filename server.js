@@ -5,7 +5,7 @@ let bodyparser=require("body-parser");
 app.use(express.static(__dirname+'/public'));
 app.use(bodyparser());
 app.get("/",(req,res)=>{
-    res.send("/index.html");
+    res.sendFile("/index.html");
 })
 app.post("/submit",(req,res)=>{
     console.log(req.body.name);
