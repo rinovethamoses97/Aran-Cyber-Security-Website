@@ -1,9 +1,11 @@
 let express=require("express");
 let nodemailer=require("nodemailer");
+let cors=require("cors");
 let app=express();
 let bodyparser=require("body-parser");
 app.use(express.static("./public"));
 app.use(bodyparser());
+app.use(cors());
 app.get("/",(req,res)=>{
     console.log("Deafault path");
     res.sendFile("index.html");
