@@ -2,7 +2,7 @@ let express=require("express");
 let nodemailer=require("nodemailer");
 let app=express();
 let bodyparser=require("body-parser");
-app.use(express.static("__dirname+'/public'"));
+app.use(express.static(__dirname+'/public'));
 app.use(bodyparser());
 app.get("/",(req,res)=>{
     res.send("index.html");
