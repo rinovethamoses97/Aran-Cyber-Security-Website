@@ -5,6 +5,7 @@ let bodyparser=require("body-parser");
 app.use(express.static("./public"));
 app.use(bodyparser());
 app.get("/",(req,res)=>{
+    console.log("Deafault path");
     res.sendFile("index.html");
 })
 app.post("/submit",(req,res)=>{
