@@ -49,8 +49,8 @@ app.post("/submit",(req,res)=>{
             });
               
             var mailOptions = {
-                from: 'rushitgnanaroy@gmail.com',
-                to: 'rushitgnanaroy@gmail.com',
+                from: 'clientEnquiryNoReply',
+                to: 'info@arancybersecurity.com',
                 subject: 'Client Enquiry Alert',
                 html: '<h1>Name '+req.body.name+'</h1><h1> Email '+req.body.email+'</h1><h1> Message '+req.body.message+'</h1>'
             };
