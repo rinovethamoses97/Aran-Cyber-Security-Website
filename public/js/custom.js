@@ -45,12 +45,22 @@ $(function(){
     /* wow
     -----------------*/
     new WOW().init();
+
+    $("#login-button").click(function(){
+        window.location="/login";
+    })
 });
 
 /* start preloader */
 $(window).load(function(){
     $('.preloader').fadeOut(1000); // set duration in brackets
-    $('#myModal').modal()   
+    $.post("/getOffer",function(data,status){
+        if(data[0].status){
+            $("#modal-header-content").text(data[0].header);
+            $("#modal-body-content").text(data[0].content);
+            $('#myModal').modal()
+        }
+    }) 
 });
 /* end preloader */
 

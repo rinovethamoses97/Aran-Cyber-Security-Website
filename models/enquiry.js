@@ -1,13 +1,16 @@
 let mongoose=require("mongoose");
 let Schema=mongoose.Schema;
-let userSchema=new Schema(
+let enquirySchema=new Schema(
     {
+        name:{
+            type:String,
+        },
         email:{
             type: String, 
         },
-        password:{
+        message:{
             type:String
         }
     }
 )
-module.exports=mongoose.model("user",userSchema);
+module.exports=mongoose.model("enquiry",enquirySchema);
