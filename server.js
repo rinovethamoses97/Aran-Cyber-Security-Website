@@ -22,7 +22,11 @@ mongoose.connection.on('error',function(err){
 let loggedInUsers=[];
 app.get("/",(req,res)=>{
     // console.log("https://"+req.headers.host+req.url);
-    res.redirect("https://"+req.headers.host+req.url);
+    if(req.secure){
+        res.sendFile(__dirname+"/public/login.html");
+    }
+    else
+        res.redirect("https://"+req.headers.host+req.url);
     // res.sendFile(__dirname+"/public/index.html");
 })
 app.get("/login",(req,res)=>{
