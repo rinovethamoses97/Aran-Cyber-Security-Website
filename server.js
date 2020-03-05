@@ -32,7 +32,7 @@ let loggedInUsers=[];
 app.get("/",(req,res)=>{
     // console.log("https://"+req.headers.host+req.url);
     // if(req.secure){
-        res.sendFile(__dirname+"/public/login.html");
+        res.sendFile(__dirname+"/public/home.html");
     // }
     // else
         // res.redirect("https://"+req.headers.host+req.url);
