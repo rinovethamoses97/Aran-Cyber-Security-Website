@@ -3,7 +3,7 @@ let nodemailer=require("nodemailer");
 let cors=require("cors");
 let app=express();
 let bodyparser=require("body-parser");
-// app.use(express.static("./public"));
+app.use(express.static("./public"));
 app.use(bodyparser());
 app.use(cors());
 app.enable('trust proxy');
