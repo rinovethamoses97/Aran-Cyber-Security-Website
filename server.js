@@ -3,7 +3,7 @@ let nodemailer=require("nodemailer");
 let cors=require("cors");
 let app=express();
 let bodyparser=require("body-parser");
-// app.use(express.static("./public"));
+app.use(express.static("./public"));
 app.use(bodyparser());
 app.use(cors());
 let mongoose=require("mongoose");
@@ -22,11 +22,11 @@ mongoose.connection.on('error',function(err){
 let loggedInUsers=[];
 app.get("/",(req,res)=>{
     // console.log("https://"+req.headers.host+req.url);
-    if(req.secure){
+    // if(req.secure){
         res.sendFile(__dirname+"/public/login.html");
-    }
-    else
-        res.redirect("https://"+req.headers.host+req.url);
+    // }
+    // else
+        // res.redirect("https://"+req.headers.host+req.url);
     // res.sendFile(__dirname+"/public/index.html");
 })
 app.get("/login",(req,res)=>{
