@@ -8,7 +8,7 @@ app.use(bodyparser());
 app.use(cors());
 app.enable('trust proxy');
 app.use(function(req, res, next){
-  	if(req.header('x-forwarded-proto') !== 'https'){
+  if(req.protocol !== 'https'){
   		res.redirect('https://' + req.header('host') + req.url);
   	}else{
   		next();
