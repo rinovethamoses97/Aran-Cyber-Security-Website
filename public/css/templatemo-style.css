@@ -198,6 +198,9 @@ header .social-icon li a
 	left: 0;
 	top: 0;	
 }
+#contact a{
+	color: white;
+}
 /* end navigation */
 
 /* start home */
