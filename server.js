@@ -141,7 +141,7 @@ app.post("/logout",(req,res)=>{
     res.send("success");
     
 });
-app.get("/gen",(req,res)=>{
+app.get("*",(req,res)=>{
     res.redirect("/");
 })
 app.listen(process.env.PORT||3000,()=>{
