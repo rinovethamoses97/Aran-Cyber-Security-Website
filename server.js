@@ -6,6 +6,7 @@ let bodyparser=require("body-parser");
 app.use(express.static("./public"));
 app.use(bodyparser());
 app.use(cors());
+app.enable('trust proxy');
 app.use(function(req, res, next) {
   if (req.secure){
     return next();
