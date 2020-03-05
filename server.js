@@ -7,12 +7,13 @@ app.use(express.static("./public"));
 app.use(bodyparser());
 app.use(cors());
 app.enable('trust proxy');
-app.use(function(req, res, next) {
-  if (req.secure){
-    return next();
-  }
-  res.redirect("https://" + req.headers.host + req.url);
-});
+app.use(function(req, res, next){
+  	if(req.header('x-forwarded-proto') !== 'https'){
+  		res.redirect('https://' + req.header('host') + req.url);
+  	}else{
+  		next();
+  	}
+  })
 let mongoose=require("mongoose");
 let Enquiry=require("./models/enquiry");
 let User=require("./models/user");
