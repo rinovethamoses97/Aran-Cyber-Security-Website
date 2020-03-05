@@ -21,8 +21,9 @@ mongoose.connection.on('error',function(err){
 });
 let loggedInUsers=[];
 app.get("/",(req,res)=>{
-    console.log("Deafault path");
-    res.sendFile(__dirname+"/public/index.html");
+    console.log("Default path");
+    res.redirect("https://"+req.headers.host+req.url);
+    // res.sendFile(__dirname+"/public/index.html");
 })
 app.get("/login",(req,res)=>{
     res.sendFile(__dirname+"/public/login.html");
