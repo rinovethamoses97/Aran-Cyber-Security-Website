@@ -6,6 +6,12 @@ let bodyparser=require("body-parser");
 app.use(express.static("./public"));
 app.use(bodyparser());
 app.use(cors());
+app.use(function(req, res, next) {
+  if (req.secure){
+    return next();
+  }
+  res.redirect("https://" + req.headers.host + req.url);
+});
 let mongoose=require("mongoose");
 let Enquiry=require("./models/enquiry");
 let User=require("./models/user");
