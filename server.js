@@ -3,16 +3,17 @@ let nodemailer=require("nodemailer");
 let cors=require("cors");
 let app=express();
 let bodyparser=require("body-parser");
-app.use(express.static("./public"));
+// app.use(express.static("./public"));
 app.use(bodyparser());
 app.use(cors());
 app.enable('trust proxy');
 app.use(function(req, res, next){
-  if(req.protocol !== 'https'){
-  		res.redirect('https://' + req.header('host') + req.url);
-  	}else{
-  		next();
-  	}
+    console.log("Rino Check"+req.header('x-forwarded-proto'));
+    if(req.header('x-forwarded-proto') == 'http'){
+            res.redirect('https://' + req.header('host') + req.url);
+        }else{
+            next();
+        }
   })
 let mongoose=require("mongoose");
 let Enquiry=require("./models/enquiry");
