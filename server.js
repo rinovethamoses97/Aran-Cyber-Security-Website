@@ -8,12 +8,12 @@ app.use(bodyparser());
 app.use(cors());
 app.enable('trust proxy');
 app.use(function(req, res, next){
-    console.log("Rino Check"+req.header('x-forwarded-proto'));
+    console.log("Check"+req.header('x-forwarded-proto'));
     if(req.header('x-forwarded-proto') == 'http'){
             res.redirect('https://' + req.header('host') + req.url);
-        }else{
-            next();
-        }
+    }else{
+        next();
+    }
   })
 let mongoose=require("mongoose");
 let Enquiry=require("./models/enquiry");
@@ -30,13 +30,7 @@ mongoose.connection.on('error',function(err){
 });
 let loggedInUsers=[];
 app.get("/",(req,res)=>{
-    // console.log("https://"+req.headers.host+req.url);
-    // if(req.secure){
-        res.sendFile(__dirname+"/public/home.html");
-    // }
-    // else
-        // res.redirect("https://"+req.headers.host+req.url);
-    // res.sendFile(__dirname+"/public/index.html");
+    res.sendFile(__dirname+"/public/home.html");
 })
 app.get("/login",(req,res)=>{
     res.sendFile(__dirname+"/public/login.html");
