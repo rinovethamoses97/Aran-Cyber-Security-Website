@@ -3,9 +3,14 @@ let nodemailer=require("nodemailer");
 let cors=require("cors");
 let app=express();
 let bodyparser=require("body-parser");
+let cookieParser=require("cookie-parser");
+let session=require("express-session");
+let bcrypt=require("bcrypt");
 app.use(express.static("./public"));
 app.use(bodyparser());
 app.use(cors());
+app.use(cookieParser());
+app.use(session({secret:"user"}));
 app.enable('trust proxy');
 app.use(function(req, res, next){
     console.log("Check"+req.header('x-forwarded-proto'));
@@ -86,59 +91,58 @@ app.post("/getOffer",(req,res)=>{
     });
 });
 app.get("/dashboard",(req,res)=>{
-    res.sendFile(__dirname+"/public/dashboard.html");
+    console.log(req.session.user);
+    if(req.session.user){
+        res.sendFile(__dirname+"/public/dashboard.html");
+    }
+    else{
+        res.redirect("/login");
+    }
 });
 app.post("/getEnquiryData",(req,res)=>{
     console.log(req.body);
     console.log(loggedInUsers);
-    let login=false;
-    for(let i in loggedInUsers){
-        if(loggedInUsers[i].email===req.body.email && loggedInUsers[i].password===req.body.password){
-            login=true;
-            break;
+    Enquiry.find(function(err,enquires){
+        console.log(enquires);
+        if(err){
+            res.send("error");    
         }
-    }
-    if(login){
-        Enquiry.find(function(err,enquires){
-            console.log(enquires);
-            if(err){
-                res.send("error");    
-            }
-            else{
-                res.send({data:enquires,login:true});
-            }
-        })
-    }
-    else{
-        res.send({login:false});
-    }
+        else{
+            res.send({data:enquires});
+        }
+    });
 });
 app.post("/loginFormSubmit",(req,res)=>{
-    User.find({email:req.body.email,password:req.body.password},function(err,user){
-        // console.log(user);
+    User.find({email:req.body.email},function(err,user){
+        console.log(user);
         if(err){
             res.send("error");
         }
         else{
             if(user.length==1){
-                loggedInUsers.push(user[0]);
-                res.send({status:"success",login:true})
+                bcrypt.compare(req.body.password,user[0].password,function(err,result){
+                    if(result){
+                        req.session.user=req.body.email;
+                        res.send({status:"success",login:true});
+                    }
+                    else{
+                        res.send({status:"success",login:false});
+                    }
+                });
             }
             else{
-                res.send({status:"success",login:false})
+                res.send({status:"success",login:false});
             }
         }
     })
 });
 app.post("/logout",(req,res)=>{
-    for(let i in loggedInUsers){
-        if(loggedInUsers[i].email===req.body.email && loggedInUsers[i].password===req.body.password){
-            loggedInUsers.splice(parseInt(i),1);
-            res.send("success");
-            return;
-        }
-    }
-    res.send("error");
+    delete req.session.user;
+    res.send("success");
+    
+});
+app.get("/gen",(req,res)=>{
+    res.redirect("/");
 })
 app.listen(process.env.PORT||3000,()=>{
     console.log("Server Running");

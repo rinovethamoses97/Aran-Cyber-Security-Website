@@ -78,15 +78,12 @@ $(window).load(function(){
 
 function submitForm(){
     event.preventDefault();
-    console.log("Form Submitted");
     let email=document.getElementById("email").value;
     let password=document.getElementById("password").value;
     $.post("/loginFormSubmit",{email:email,password:password},function(data,status){
         if(data.status==="success"){
             if(data.login){
                 window.location="/dashboard";
-                localStorage.setItem("email",email);
-                localStorage.setItem("password",password);
             }
             else{
                 document.getElementById("email").value="";

@@ -48,9 +48,7 @@ $(function(){
     $("#logout-button").click(function(){      
         $.post("/logout",{email:localStorage.getItem("email"),password:localStorage.getItem("password")},function(data,status){
             if(data==="success"){
-                localStorage.setItem("email","");
-                localStorage.setItem("password","");
-                window.location.href="/login";      
+                window.location="/login";      
             }
         })
     })
@@ -59,17 +57,12 @@ $(function(){
 /* start preloader */
 $(window).load(function(){
     $.post("/getEnquiryData",{email:localStorage.getItem("email"),password:localStorage.getItem("password")},function(data,status){
-        if(data.login){
-            let html="<table class='table'><thead><tr><th>Name</th><th>Email</th><th>Message</th></tr></thead><tbody>";
-            for(let i in data.data){
-                html+="<tr><td>"+data.data[i].name+"</td><td>"+data.data[i].email+"</td><td>"+data.data[i].message+"</td></tr>";
-            }
-           html+="</tbody></table>";
-           $("#table").html(html);
+        let html="<table class='table'><thead><tr><th>Name</th><th>Email</th><th>Message</th></tr></thead><tbody>";
+        for(let i in data.data){
+            html+="<tr><td>"+data.data[i].name+"</td><td>"+data.data[i].email+"</td><td>"+data.data[i].message+"</td></tr>";
         }
-        else{
-            window.location="/login";
-        }
+        html+="</tbody></table>";
+        $("#table").html(html);
     })
 });
 /* end preloader */
