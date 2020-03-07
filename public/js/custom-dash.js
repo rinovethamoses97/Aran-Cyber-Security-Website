@@ -57,7 +57,7 @@ $(function(){
 /* start preloader */
 $(window).load(function(){
     $.post("/getEnquiryData",{email:localStorage.getItem("email"),password:localStorage.getItem("password")},function(data,status){
-        let html="<table class='table'><thead><tr><th>Name</th><th>Email</th><th>Message</th></tr></thead><tbody>";
+        let html="<table id='enquiryTable' class='table table-dark'><thead><tr><th>Name</th><th>Email</th><th>Message</th></tr></thead><tbody>";
         for(let i in data.data){
             html+="<tr><td>"+data.data[i].name+"</td><td>"+data.data[i].email+"</td><td>"+data.data[i].message+"</td></tr>";
         }
