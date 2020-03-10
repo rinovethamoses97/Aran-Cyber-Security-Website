@@ -1,6 +1,7 @@
 /* HTML document is loaded. DOM is ready.
 -------------------------------------------*/
 $(function(){
+    $('[data-toggle="popover"]').popover();   
 
     /* start typed element */
     //http://stackoverflow.com/questions/24874797/select-div-title-text-and-make-array-with-jquery
@@ -48,7 +49,7 @@ $(function(){
 
     $("#login-button").click(function(){
         window.location="/login";
-    })
+    });
 });
 
 /* start preloader */
