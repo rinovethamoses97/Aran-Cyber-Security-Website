@@ -46,12 +46,35 @@ $(function(){
     -----------------*/
     new WOW().init();
     $("#logout-button").click(function(){      
+        event.preventDefault();
         $.post("/logout",{email:localStorage.getItem("email"),password:localStorage.getItem("password")},function(data,status){
             if(data==="success"){
                 window.location="/login";      
             }
         })
     })
+    $("#offer-button").click(function(){
+
+        event.preventDefault();
+        $("#enquiry-button").removeClass("current");
+        $("#offer-button").addClass("current");
+        $("#table").hide();
+        $("#offer").show();
+        $.post("/getOffer",function(data,status){
+            document.getElementById("header").value=data[0].header;
+            document.getElementById("content").value=data[0].content;
+            document.getElementById("switch").checked=data[0].status;
+            
+        }) ;
+    });
+    $("#enquiry-button").click(function(){
+        event.preventDefault();
+        $("#offer-button").removeClass("current");
+        $("#enquiry-button").addClass("current");
+        $("#offer").hide();
+        $("#table").show();
+    });
+    
 });
 
 /* start preloader */
@@ -65,4 +88,22 @@ $(window).load(function(){
         $("#table").html(html);
     })
 });
+function submitForm(type){
+    event.preventDefault();
+    console.log("Form Submitted");
+    let header=document.getElementById("header").value;
+    let content=document.getElementById("content").value;
+    let status=null;
+    if(document.getElementById("switch").checked){
+        status=true;
+    }
+    else{
+        status=false;
+    }
+    $.post("/updateOffer",{header:header,content:content,status:status,type:type},function(data,status){
+        if(data==="success"){
+            alert("Updated");
+        }
+    })
+}
 /* end preloader */

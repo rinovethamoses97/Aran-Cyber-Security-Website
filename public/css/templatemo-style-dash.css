@@ -308,8 +308,8 @@ header .social-icon li a
     outline:none;
   }
   
-  .login-dark form .btn-primary:hover, .login-dark form .btn-primary:active {
-    background:#214a80;
+  .login-dark form .btn-primary:hover, .login-dark form .btn-primary:active ,.login-dark form .btn-primary:focus{
+    background:#28a7e9;
     outline:none;
   }
   
@@ -326,11 +326,12 @@ header .social-icon li a
     opacity:1;
     text-decoration:none;
   }
-  
   .login-dark form .btn-primary:active {
     transform:translateY(1px);
   }
-  
+  #offer{
+	  display: none;
+  }
   
 /* end home */
 
@@ -671,8 +672,8 @@ header .social-icon li a
 		}
 	#home
 		{
-			min-height: 500px;
-			padding-top: 100px;
+			min-height: 620px;
+			padding-top: 150px;
 			padding-bottom: 40px;
 		}
 	#home h1

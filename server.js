@@ -141,6 +141,26 @@ app.post("/logout",(req,res)=>{
     res.send("success");
     
 });
+app.post("/updateOffer",(req,res)=>{
+    let updateData;
+    if(req.body.type==="header"){
+        updateData={header:req.body.header}
+    }
+    else if(req.body.type==="content"){
+        updateData={content:req.body.content}
+    }
+    else{
+        updateData={status:req.body.status}
+    }
+    Offer.findOneAndUpdate({},updateData,function(err,offer){
+        if(err){
+
+        }
+        else{
+            res.send("success");
+        }
+    })
+})
 app.get("*",(req,res)=>{
     res.redirect("/");
 })
