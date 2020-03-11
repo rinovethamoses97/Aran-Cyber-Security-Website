@@ -142,17 +142,7 @@ app.post("/logout",(req,res)=>{
     
 });
 app.post("/updateOffer",(req,res)=>{
-    let updateData;
-    if(req.body.type==="header"){
-        updateData={header:req.body.header}
-    }
-    else if(req.body.type==="content"){
-        updateData={content:req.body.content}
-    }
-    else{
-        updateData={status:req.body.status}
-    }
-    Offer.findOneAndUpdate({},updateData,function(err,offer){
+    Offer.findOneAndUpdate({},{status:req.body.status,header:req.body.header,content:req.body.content},function(err,offer){
         if(err){
 
         }
