@@ -26,8 +26,8 @@ app.use(function(req, res, next){
 let mongoose=require("mongoose");
 let Enquiry=require("./models/enquiry");
 let User=require("./models/user");
-// mongoose.connect('mongodb://rino:rino1234@ds263848.mlab.com:63848/alancybersecurity');
-mongoose.connect('mongodb://localhost:27017/alancybersecurity');
+mongoose.connect('mongodb://rino:rino1234@ds263848.mlab.com:63848/alancybersecurity');
+// mongoose.connect('mongodb://localhost:27017/alancybersecurity');
 let connection=mongoose.connection;
 let gfs;
 let Offer=require("./models/offer");
@@ -42,8 +42,8 @@ mongoose.connection.on('error',function(err){
     }
 });
 const storage = new GridFsStorage({
-    // url: "mongodb://rino:rino1234@ds263848.mlab.com:63848/alancybersecurity",
-    url:"mongodb://localhost:27017/alancybersecurity",
+    url: "mongodb://rino:rino1234@ds263848.mlab.com:63848/alancybersecurity",
+    // url:"mongodb://localhost:27017/alancybersecurity",
     file: (req, file) => {
       return new Promise((resolve, reject) => {
           const filename = "offer-image";
