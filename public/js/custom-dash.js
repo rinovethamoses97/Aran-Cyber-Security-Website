@@ -74,7 +74,46 @@ $(function(){
         $("#offer").hide();
         $("#table").show();
     });
-    
+    $("#offerFormButton").click(function(){
+        event.preventDefault();
+        console.log("Form Submitted");
+        let header=document.getElementById("header").value;
+        let content=document.getElementById("content").value;
+        let status=null;
+        if(document.getElementById("switch").checked){
+            status=true;
+        }
+        else{
+            status=false;
+        }
+        let data=new FormData();
+        data.append("header",header);
+        data.append("content",content);
+        data.append("status",status);
+        $.post("/updateOffer",{header:header,content:content,status:status},function(data,start){
+            if(data==="success"){
+                alert("Updated");
+            }
+        });
+    });
+    $("#offerImage").click(function(){
+        event.preventDefault();
+        console.log("Form Submitted");
+        let file=document.getElementById("file");
+        let data=new FormData();
+        data.append("file",file.files[0]);
+        $.ajax({type:"POST",url:"/updateOfferImage",processData:false,contentType:false,data:data,success:function(data){
+            if(data==="success"){
+                alert("Updated");
+            }
+        }})
+    });
+    $("#viewImage").click(function(event){
+        event.preventDefault();
+        date = new Date();
+        document.getElementById("modalImage").src="/image/offer-image?"+date.getTime();
+        $('#myModal').modal()
+    });
 });
 
 /* start preloader */
@@ -88,22 +127,5 @@ $(window).load(function(){
         $("#table").html(html);
     })
 });
-function submitForm(type){
-    event.preventDefault();
-    console.log("Form Submitted");
-    let header=document.getElementById("header").value;
-    let content=document.getElementById("content").value;
-    let status=null;
-    if(document.getElementById("switch").checked){
-        status=true;
-    }
-    else{
-        status=false;
-    }
-    $.post("/updateOffer",{header:header,content:content,status:status,type:type},function(data,status){
-        if(data==="success"){
-            alert("Updated");
-        }
-    })
-}
+
 /* end preloader */

@@ -6,6 +6,9 @@ let bodyparser=require("body-parser");
 let cookieParser=require("cookie-parser");
 let session=require("express-session");
 let bcrypt=require("bcrypt");
+let multer=require("multer");
+let Grid=require("gridfs-stream");
+let GridFsStorage=require("multer-gridfs-storage");
 app.use(express.static("./public"));
 app.use(bodyparser());
 app.use(cors());
@@ -23,16 +26,37 @@ app.use(function(req, res, next){
 let mongoose=require("mongoose");
 let Enquiry=require("./models/enquiry");
 let User=require("./models/user");
-mongoose.connect('mongodb://rino:rino1234@ds263848.mlab.com:63848/alancybersecurity')
+// mongoose.connect('mongodb://rino:rino1234@ds263848.mlab.com:63848/alancybersecurity');
+mongoose.connect('mongodb://localhost:27017/alancybersecurity');
+let connection=mongoose.connection;
+let gfs;
 let Offer=require("./models/offer");
 mongoose.connection.on('connected',function(){
     console.log("Mongo Db connected");
+    gfs = Grid(connection.db, mongoose.mongo);  
+    gfs.collection('uploads');
 });
 mongoose.connection.on('error',function(err){
     if(err){
         console.log(''+err);
     }
 });
+const storage = new GridFsStorage({
+    // url: "mongodb://rino:rino1234@ds263848.mlab.com:63848/alancybersecurity",
+    url:"mongodb://localhost:27017/alancybersecurity",
+    file: (req, file) => {
+      return new Promise((resolve, reject) => {
+          const filename = "offer-image";
+          const fileInfo = {
+            filename: filename,
+            bucketName: 'uploads'
+          };
+          resolve(fileInfo);
+      });
+    }
+  });
+  
+const upload = multer({ storage });
 let loggedInUsers=[];
 app.get("/",(req,res)=>{
     res.sendFile(__dirname+"/public/home.html");
@@ -113,6 +137,7 @@ app.post("/getEnquiryData",(req,res)=>{
     });
 });
 app.post("/loginFormSubmit",(req,res)=>{
+    console.log(req.body);
     User.find({email:req.body.email},function(err,user){
         console.log(user);
         if(err){
@@ -141,19 +166,76 @@ app.post("/logout",(req,res)=>{
     res.send("success");
     
 });
+function deleteFile(req,res,next){
+    gfs.files.findOne({filename:"offer-image"},function(err,file){
+        if(err){
+            console.log(err);
+        }
+        else{
+            if(file){
+                gfs.db.collection("uploads.chunks").deleteMany({files_id:file._id}, function(err) {
+                    if(err){
+    
+                    }
+                    else{
+                        gfs.files.findOneAndDelete({_id:file._id},function(err){
+                            if(err){
+    
+                            }
+                            else{
+                                console.log("Previous Verions of File Removed");
+                                next();
+                            }
+                        })
+                    }
+                });
+            }
+            else{
+                next();
+            }
+        }
+    })
+}
 app.post("/updateOffer",(req,res)=>{
+    console.log(req.body);
     Offer.findOneAndUpdate({},{status:req.body.status,header:req.body.header,content:req.body.content},function(err,offer){
         if(err){
-
+            
         }
         else{
             res.send("success");
         }
     })
 })
-app.get("*",(req,res)=>{
-    res.redirect("/");
+app.post("/updateOfferImage",deleteFile,upload.single('file'),(req,res)=>{
+    console.log(req.body);
+    res.send("success");
 })
 app.listen(process.env.PORT||3000,()=>{
     console.log("Server Running");
+})
+app.get('/image/:filename', (req, res) => {
+    console.log("Hit");
+    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+      // Check if the input is a valid image or not
+      if (!file || file.length === 0) {
+        return res.status(404).json({
+          err: 'No file exists'
+        });
+      }
+  
+      // If the file exists then check whether it is an image
+      if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
+        // Read output to browser
+        const readstream = gfs.createReadStream(file.filename);
+        readstream.pipe(res);
+      } else {
+        res.status(404).json({
+          err: 'Not an image'
+        });
+      }
+    });
+});
+app.get("*",(req,res)=>{
+    res.redirect("/");
 })
