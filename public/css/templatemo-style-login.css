@@ -207,7 +207,7 @@ header .social-icon li a
 		background-size: cover;
 		padding-top: 160px;
 		padding-bottom: 100px;
-		min-height: 650px;
+		min-height: 1150px;
 	}
 #home h1
 	{
@@ -623,7 +623,7 @@ header .social-icon li a
 @media only screen and ( max-width: 767px ) {
 	#home
 		{
-			min-height: 300px;
+			min-height: 620px;
 			padding-top: 90px;
 			padding-bottom: 90px;
 		}
